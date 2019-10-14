@@ -20,6 +20,8 @@ define("SHARED_PATH",PRIVATE_PATH."/shared");
 // echo SHARED_PATH."\n";
 
 require_once("functions.php");
+require_once("database.php");
+require_once("query_functions.php");
 
 
 // echo "-------------------------\n";
@@ -31,3 +33,6 @@ $public_end = strpos($_SERVER['SCRIPT_NAME'], '/public') + 7;
 
 // echo $public_end."\n";
 // echo $doc_root."\n";
+
+// database connect
+$db = db_connect();

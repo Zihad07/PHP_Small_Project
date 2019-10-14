@@ -23,7 +23,7 @@ else{
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <div id="id">
+            <div id="content">
                 <a class="back-list" href="<?php echo url_for('/staff/subjects/index.php'); ?>">&laquo; Back to List</a>
 
                 <div class="subject new">
