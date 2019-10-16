@@ -1,20 +1,12 @@
 <?php 
 require_once("../../../private/initialize.php");
-?>
 
-<?php 
-$test = $_GET['test'] ?? "";
+$subject_set = find_all_subjects();
+$subject_count = mysqli_num_rows($subject_set) + 1;
+mysqli_free_result($subject_set);
 
-if($test == '404'){
-    error_404();
-}elseif($test =='500'){
-    error_500();
-}elseif($test == 'redirect'){
-    redirect_to(url_for('staff/subjects/index.php'));
-}
-else{
-    echo "No error";
-}
+$subject = [];
+$subject["position"] = $subject_count;
 ?>
 
 <?php $page_title = "Create Subject";?>
@@ -39,7 +31,17 @@ else{
                             <dt>Position</dt>
                             <dd>
                                 <select class="form-control" name="position" id="">
-                                    <option value="1">1</option>
+                                    <?php 
+                                        for($i = 1; $i<=$subject_count;$i++){
+                                            echo "<option value=\"{$i}\"";
+                                            if($subject['position'] == $i){
+                                                echo " selected";
+                                            }
+
+                                            echo ">{$i}</option>";
+                                        }
+                                    
+                                    ?>
                                 </select>
                             </dd>
                         </dl>

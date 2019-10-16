@@ -5,6 +5,8 @@ require_once("../../../private/initialize.php");
 <?php
 
     $subject_set = find_all_subjects();
+    // echo mysqli_num_rows($subject_set);
+    // exit;
 
 ?>
 <?php $page_title = "Staff Menu";?>
@@ -40,7 +42,9 @@ require_once("../../../private/initialize.php");
                                     <td><?php echo $subject['menu_name'];?></td>
                                     <td><a class="action" href="<?php echo url_for('/staff/subjects/show.php?id='.h(url($subject['id']))); ?>">View</a></td>
                                     <td><a class="action" href="<?php echo url_for('/staff/subjects/edit.php?id='.h(url($subject['id']))); ?>">Edit</a></td>
-                                    <td><a class="action" href="">Delete</a></td>
+                                    <td><a class="action" href="<?php echo url_for('/staff/subjects/delete.php?id='.h(url($subject['id']))); ?>">Delete</a></td>
+                                    
+                    
                                 </tr>
                             <?php }?>
                         </table>

@@ -41,7 +41,8 @@ require_once("../../../private/initialize.php");
                                     <td><?php echo h($page['menu_name']);?></td>
                                     <td><a class="action" href="<?php echo url_for('/staff/pages/show.php?id='.h(url($page['id']))); ?>">View</a></td>
                                     <td><a class="action" href="<?php echo url_for('/staff/pages/edit.php?id='.h(url($page['id']))); ?>">Edit</a></td>
-                                    <td><a class="action" href="">Delete</a></td>
+                                    <td><a class="action" href="<?php echo url_for('/staff/pages/delete.php?id='.h(url($page['id']))); ?>">Delete</a></td>
+                                    
                                 </tr>
                             <?php }?>
                         </table>
