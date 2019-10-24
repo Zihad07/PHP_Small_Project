@@ -7,6 +7,7 @@
         throw new Exception("Cannot connect to database");
     }
 
+    // collect all data from database
     $sql = "SELECT * FROM tasks WHERE complete = 0 ORDER BY date";
     $result = mysqli_query($connection,$sql);
 
@@ -43,7 +44,7 @@
 
         <p>This is a sample project for managing our daily task.We're going to use HTML, CSS, PHP, Javascript and MySQL for this project.</p>
 
-        <!-- Complete task table -->
+        <!-- mark Complete task table -->
         <?php 
             if(mysqli_num_rows($resultCompleteTasks) > 0){?>
                 <h4>Complete Tasks</h4>
@@ -69,7 +70,7 @@
                                 <td><?php echo $cdata['id'];?></td>
                                 <td><?php echo $cdata['task'];?></td>
                                 <td><?php echo mytime($cdata['date'])?></td>
-                                <td><a href="#">Delete</a></td>
+                                <td><a class="delete" data-taskid="<?php echo $cdata['id'];?>" href="#">Delete</a> | <a class="incomplete" data-taskid="<?php echo $cdata['id'];?>" href="#">Mark Incomlete</a></td>
                             </tr>
                         <?php }?>
 
@@ -87,7 +88,7 @@
             <?php }
             else{?>
             <h4>Upcoming Tasks</h4>
-        <form action="">
+        <form action="task.php" method="post">
             <table>
                 <thead>
                     <tr>
@@ -104,11 +105,11 @@
 
                     <?php while($data = mysqli_fetch_assoc($result)){?>
                         <tr>
-                            <td><input class="label-inline" type="checkbox" value="<?php echo $data['id'];?>"></td>
+                            <td><input name="taskids[]" class="label-inline" type="checkbox" value="<?php echo $data['id'];?>"></td>
                             <td><?php echo $data['id'];?></td>
                             <td><?php echo $data['task'];?></td>
                             <td><?php echo mytime($data['date'])?></td>
-                            <td><a href="#">Delete</a> |<a href="#">Complete</a></td>
+                            <td><a class="delete" data-taskid="<?php echo $data['id'];?>" href="#">Delete</a> |<a class="complete" href="#" data-taskid="<?php echo $data['id'];?>">Complete</a></td>
                         </tr>
                     <?php }?>
 
@@ -116,16 +117,17 @@
                 </tbody>
             </table>
 
-            <select id="action">
+            <select id="action" name="action">
                 <option value="0">With Selected</option>
-                <option value="del">Delete</option>
-                <option value="complete">Mark As Complete</option>
+                <option value="bulkdelete">Delete</option>
+                <option value="bulkcomplete">Mark As Complete</option>
             </select>
-            <input class="button-primary" type="submit" value="Submit">
+            <input class="button-primary" id="bulksubmit" type="submit" value="Submit">
         </form>
         <?php }?>
 
         <p></p>
+        
         <h4>Add Tasks</h4>
         <form action="task.php" method="post">
             <fieldset>
@@ -146,9 +148,64 @@
             </fieldset>
         </form>
     </div>
+
+    <!-- complet task -->
+    <form action="task.php" method="post" id="completeform">
+        <input type="hidden" name="action" value="complete">
+        <input type="hidden" name="taskid" id="taskid" >
+    </form>
+    <!-- delete task -->
+    <form action="task.php" method="post" id="deleteform">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="taskid" id="dtaskid" >
+    </form>
+    <!-- incomplet task -->
+    <form action="task.php" method="post" id="incompleteform">
+        <input type="hidden" name="action" value="incomplete">
+        <input type="hidden" name="taskid" id="itaskid" >
+    </form>
     
 </body>
+
+<!-- my js -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // alert('done');
+        $(".complete").on('click',function(){
+            var id = $(this).data('taskid');
+            // alert(id);
+            $("#taskid").val(id);
+            $("#completeform").submit();
+        })
+
+        // Delete
+        $('.delete').on('click',function(){
+            if(confirm("Are you sure to delete this task?")){
+                var id = $(this).data('taskid');
+                $('#dtaskid').val(id);
+                $('#deleteform').submit();
+            }
+        })
+        // incomplete
+        $(".incomplete").on('click', function () {
+                var id = $(this).data("taskid");
+                $("#itaskid").val(id);
+                $("#incompleteform").submit();
+            });
+
+        
+        // Bulksubmit
+        $('#bulksubmit').on('click',function(){
+            if($('#action').val() == 'bulkdelete'){
+                if(!confirm("Are you sure to delete?")){
+                    return false;
+                }
+            }
+        })
+
+       
+    });
+</script>
 </html>
 
-$task = $_POST['task'];
-            $date = $_POST['date'];
