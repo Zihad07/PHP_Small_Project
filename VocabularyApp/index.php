@@ -1,4 +1,10 @@
 <?php 
+    session_start();
+    $userid = $_SESSION['id'] ?? 0;
+    if($userid){
+        header("Location: words.php");
+        die();
+    }
     require_once('function.php')
 ?>
 <!DOCTYPE html>

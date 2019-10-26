@@ -1,5 +1,12 @@
 <?php 
 
+include "config.php";
+$connection = mysqli_connect( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
+mysqli_set_charset($connection, "utf8");
+if ( ! $connection ) {
+	echo mysqli_error($connection);
+    throw new Exception( "Cannot connect to database" );
+}
 function getStatusMessage($statusCode = 0){
     $status = [
         '0'=>'',
@@ -15,5 +22,20 @@ function getStatusMessage($statusCode = 0){
     return $status[$statusCode];
 }
 
+function getWords($user_id){
+    global $connection;
+    
+    $sql = "SELECT * FROM words WHERE user_id='{$user_id}' ORDER BY word";
+
+    $result = mysqli_query($connection,$sql);
+    $data = [];
+
+    while($_data = mysqli_fetch_assoc($result)){
+        array_push($data,$_data);
+    }
+
+    return $data;
+
+}
 
 ?>
